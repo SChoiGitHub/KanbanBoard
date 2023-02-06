@@ -1,0 +1,48 @@
+type Board {
+    id: Int!
+    name: String!
+    statuses: [Status]
+}
+
+type Status {
+    id: Int!
+    boardId: Int!
+    ordering: Int!
+    title: String!
+    tasks: [Task],
+    limit: Int
+}
+
+type Task {
+    id: Int!
+    statusId: Int!
+    text: String
+}
+
+type Query {
+    allBoards: [Board!]
+    board(id: Int!): Board!
+}
+
+input NewBoardInput {
+    name: String!
+    statuses: [String!]!
+}
+
+input NewTaskInput {
+    text: String!
+}
+
+input UpdateStatusInput {
+    title: String
+    limit: Int
+}
+
+type Mutation {
+    createBoard(input: NewBoardInput!): Board
+    deleteBoard(id: Int!): Board
+    updateStatus(id: Int!, newValues: UpdateStatusInput!): Status
+    createTask(boardId: Int!, newTask: NewTaskInput!): Task
+    moveTask(taskId: Int!, newStatusId: Int!): Task
+    deleteTask(taskId: Int!): Task
+}

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Status` ADD COLUMN `limit` INTEGER NOT NULL DEFAULT 0;

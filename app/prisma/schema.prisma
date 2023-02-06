@@ -1,0 +1,35 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Board {
+  id Int @id @default(autoincrement())
+  name String
+  statuses Status[]
+}
+
+model Status {
+  id Int @id @default(autoincrement())
+  title String
+  boardId Int
+  ordering Int
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  tasks Task[]
+  limit Int @default(0)
+
+  @@unique([boardId, title])
+  @@unique([boardId, ordering])
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+  text String
+  statusId Int
+  status Status @relation(fields: [statusId], references: [id], onDelete: Cascade)
+}

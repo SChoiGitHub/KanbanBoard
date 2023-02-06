@@ -1,0 +1,5 @@
+**/__gql__
+.env
+.gitignore
+next-env.d.ts
+README.md

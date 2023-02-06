@@ -1,0 +1,17 @@
+schema: "./schema.graphql"
+documents: 
+  - "pages/**/*.ts(x)?"
+  - "components/**/*.ts(x)?"
+  - "api/**/*.ts"
+generates:
+  ./api/__gql__/server.ts:
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+    config:
+      useIndexSignature: true
+  ./components/__gql__/:
+    preset: 'client'
+    presetConfig:
+      gqlTagName: 'gql'
+    ignoreNoDocuments: true
