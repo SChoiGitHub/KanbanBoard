@@ -1,4 +1,6 @@
+import { EditStatusModal } from "@/components/EditStatusModal";
 import { isStatusLimitReached } from "@/components/helper";
+import { Status } from "@/components/__gql__/graphql";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useAddTask, useQueryBoard } from "../../../components/Hooks";
@@ -15,6 +17,8 @@ const Home = () => {
 
   const [firstStatus] = statuses;
   const cannotAddTasks: boolean = !firstStatus || isStatusLimitReached(firstStatus);
+
+  const [selectedStatus, setSelectedStatus] = useState<Status|undefined>(undefined);
 
   return (
     <div>
@@ -34,11 +38,12 @@ const Home = () => {
         {
           statuses.flatMap(s => s ? [s] : []).map(status => {
             return (
-              <StatusColumn key={status.id} status={status} />
+              <StatusColumn key={status.id} status={status} selectStatus={setSelectedStatus} />
             )
           })
         }
       </div>
+      <EditStatusModal open={!!selectedStatus} status={selectedStatus} onClose={() => setSelectedStatus(undefined)}/>
     </div>
   );
 }

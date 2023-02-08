@@ -1,13 +1,14 @@
 import { ErrorList } from "@/components/ErrorList";
-import { useQueryBoard } from "@/components/Hooks";
 import { NumberInput } from "@/components/NumberInput";
 import { TextInput } from "@/components/TextInput";
 import { gql } from "@/components/__gql__/gql";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Modal } from "@mui/material";
 import { useRouter } from "next/router";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+import { Status } from "./__gql__/graphql";
 
 const UPDATE_STATUS = gql(/* GraphQL */`
   mutation updateStatus($id: Int!, $input: UpdateStatusInput!) {
@@ -30,60 +31,60 @@ const Schema = z.object({
 
 type FormType = z.infer<typeof Schema>;
 
-const Form = ({ title, id, limit }: { title: string, id: number, limit?: number|null}) => {
+const Form = ({ title, id, limit, onClose }: { title: string, id: number, limit?: number | null, onClose: () => any }) => {
   const router = useRouter();
-  const methods = useForm<FormType>({ 
+  const methods = useForm<FormType>({
     defaultValues: {
       title,
       limit: limit ?? 0
     },
     shouldUnregister: true,
-    resolver: zodResolver(Schema) 
+    resolver: zodResolver(Schema)
   });
   const [updateStatus] = useMutation(UPDATE_STATUS, {
     onCompleted: (data) => {
       if (data?.updateStatus) {
-        router.push(`/board/${data.updateStatus.boardId}`);
+        onClose();
       }
     },
   });
 
-  return ( 
-    <div>
+  return (
+    <Box sx={{ margin: "16px" }}>
       <h3>{title}</h3>
       <FormProvider {...methods}>
         <TextInput name="title" labelText="Status Title" />
         <br />
-        <p>A zero limit will be &quot;No Limit&quot;. A nonzero limit will be enforced.</p>
-        <NumberInput name="limit" labelText="Maximum Number of Allowed Tasks" />
-        <button type="submit" onClick={methods.handleSubmit(
+        <NumberInput name="limit" labelText="Maximum Number of Allowed Tasks" tooltip="A zero limit will be &quot;No Limit&quot;. A nonzero limit will be enforced." />
+        <button type="submit" disabled={methods.formState.isSubmitting} onClick={methods.handleSubmit(
           (values) => updateStatus({
-            variables: {  id, input: values }
+            variables: { id, input: values }
           }))}>Submit</button>
         <ErrorList errors={methods.formState.errors} />
       </FormProvider>
-    </div>
+    </Box>
   )
 }
 
-const Component = () => {
-  const router = useRouter();
-  const { statusId: statusIdAsString, id: idAsString } = router.query;
-  const id = Number(idAsString);
-  const statusId = Number(statusIdAsString);
-  const { statuses } = useQueryBoard(id);
-  const status = statuses.find(status => status && status.id === statusId);
-  if (!status) {
-    return null;
-  }
+type Props = { status?: Pick<Status, 'id' | 'title' | 'limit'>, open: boolean, onClose: () => any };
+export const EditStatusModal = ({ status, open, onClose }: Props) => {
+  const { id, title, limit } = status ?? { id: -1, title: '', limit: 0 };
 
-  const { title, limit } = status;
-
-  return (<Form
-    id={status.id}
-    title={title}
-    limit={limit}
-  />);
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      aria-labelledby="parent-modal-title"
+      aria-describedby="parent-modal-description"
+    >
+      <Box sx={{ background: "#FFFFFF", top: "50%", left: "50%", transform: 'translate(-50%, -50%)', position: 'absolute' }}>
+        <Form
+          id={id}
+          title={title}
+          limit={limit}
+          onClose={onClose}
+        />
+      </Box>
+    </Modal>
+  );
 }
-
-export default Component;

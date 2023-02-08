@@ -8,9 +8,10 @@ import { Status, Task } from './__gql__/graphql';
 
 type Props = {
   status: Status;
+  selectStatus: (s: Status) => any
 };
 
-const StatusColumn = ({ status }: Props) => {
+const StatusColumn = ({ status, selectStatus }: Props) => {
   const { title, id, boardId } = status;
   const tasks = status.tasks ?? [];
   const isLimitReached = isStatusLimitReached(status);
@@ -29,7 +30,9 @@ const StatusColumn = ({ status }: Props) => {
 
   return (
     <div style={{ flex: "1 1 0", width: "0" }} ref={isLimitReached ? null : drop}>
-      <h4><Link href={`/board/${boardId}/${id}`}>{title}</Link></h4>
+      <h4>
+        <a onClick={() => selectStatus(status)}>{title}</a>
+      </h4>
       {isLimitReached && (<h5>You reached the WIP Limit. Finish these tasks.</h5>)}
       {tasks.length > 0 ? tasks.map(task => {
         if (!task) {
