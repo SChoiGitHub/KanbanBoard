@@ -1,12 +1,17 @@
-import { useField } from "formik";
+import { useController, useFormContext } from "react-hook-form";
 
 export const TextInput = ({ name, labelText }: { name: string, labelText: string }) => {
-  const [_0, { value }, { setValue }] = useField(name);
+  const {
+    field: { value, onChange, ref },
+  } = useController({
+    name,
+    shouldUnregister: true,
+  });
 
   return (
     <>
       <label htmlFor={name}>{labelText}</label>
-      <input name={name} value={value} onChange={e => setValue(e.target.value)} />
+      <input ref={ref} name={name} value={value} onChange={onChange} />
     </>
   );
 }

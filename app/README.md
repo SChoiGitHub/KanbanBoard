@@ -16,7 +16,8 @@ In order to understand what Kanban is, I created an application that would facil
 - Database
   - Prisma
 - UI
-  - Formik
+  - React Hook Form
+  - Zod
 - NextJS
 
 ## TODOS:
