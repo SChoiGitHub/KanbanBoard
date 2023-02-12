@@ -23,4 +23,6 @@ In order to understand what Kanban is, I created an application that would facil
 ## TODOS:
 - Account functionality
 - Nicer UI: Modals, Tooltips, etc.
-- Fix docker compose to allow DB connections without exposing ports.
+-- Error List should be replaced
+-- Validate for uniqueness
+- CreateBoard should update cache

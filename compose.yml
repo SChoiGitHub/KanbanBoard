@@ -6,6 +6,10 @@ services:
     restart: always
     ports:
       - 3306:3306
+    networks:
+      main:
+        aliases:
+          - mysqldb
     environment:
       MYSQL_ROOT_PASSWORD: passwordExample
   nextjs-app:
@@ -13,4 +17,10 @@ services:
     ports:
       - 4000:3000
     environment:
-      MYSQL_ROOT_PASSWORD: "TODO: mysql://root:passwordExample@localhost:3306/myDatabase"
+      DATABASE_URL: "mysql://root:passwordExample@mysqldb:3306/myDatabase"
+    networks:
+      - main
+
+networks:
+  main:
+    name: main

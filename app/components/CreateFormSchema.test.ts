@@ -1,33 +1,31 @@
 import { CreateFormSchema } from "./CreateFormSchema";
 
 describe('CreateFormSchema', () => {
-    it('can handle arrays with null in them', async () => {
-      const obj = {
-        "name": "Testing",
-        "statuses": [
-          "Test",
-          "123",
-          null,
-        ]
-      };
+  it('can pass valid objects', async () => {
+    const obj = {
+      "name": "Testing",
+      "statuses": [
+        { name: "Test" },
+        { name: "123" },
+      ]
+    };
 
-      const actual = CreateFormSchema.safeParse(obj);
+    const actual = CreateFormSchema.safeParse(obj);
 
-      expect(actual.success).toBeTruthy();
-    });
+    expect(actual.success).toBeTruthy();
+  });
 
-    it('cconsiders single character statuses invalid', async () => {
-      const obj = {
-        "name": "Testing",
-        "statuses": [
-          "T",
-          "123",
-          null,
-        ]
-      };
+  it('cconsiders single character statuses invalid', async () => {
+    const obj = {
+      "name": "Testing",
+      "statuses": [
+        { name: "T" },
+        { name: "123" },
+      ]
+    };
 
-      const actual = CreateFormSchema.safeParse(obj);
+    const actual = CreateFormSchema.safeParse(obj);
 
-      expect(actual.success).toBeFalsy();
-    });
+    expect(actual.success).toBeFalsy();
+  });
 });

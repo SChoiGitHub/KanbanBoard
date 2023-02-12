@@ -4,10 +4,9 @@ import { TextInput } from "@/components/TextInput";
 import { gql } from "@/components/__gql__/gql";
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Modal } from "@mui/material";
-import { useRouter } from "next/router";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
+import { CenterModal } from "./CenterModal";
 import { CheckboxInput } from "./CheckboxInput";
 import { EditStatusSchema } from "./EditStatusSchema";
 import { Status } from "./__gql__/graphql";
@@ -54,7 +53,7 @@ const Form = ({ title, id, limit, onClose }: { title: string, id: number, limit?
   const hasLimit = methods.getValues('hasLimit');
 
   return (
-    <Box sx={{ margin: "16px" }}>
+    <>
       <h3>{title}</h3>
       <FormProvider {...methods}>
         <TextInput name="title" labelText="Status Title" />
@@ -75,7 +74,7 @@ const Form = ({ title, id, limit, onClose }: { title: string, id: number, limit?
         <br />
         <ErrorList errors={methods.formState.errors} />
       </FormProvider>
-    </Box>
+    </>
   )
 }
 
@@ -84,20 +83,13 @@ export const EditStatusModal = ({ status, open, onClose }: Props) => {
   const { id, title, limit } = status ?? { id: -1, title: '', limit: 0 };
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="parent-modal-title"
-      aria-describedby="parent-modal-description"
-    >
-      <Box sx={{ background: "#FFFFFF", top: "50%", left: "50%", transform: 'translate(-50%, -50%)', position: 'absolute' }}>
-        <Form
-          id={id}
-          title={title}
-          limit={limit}
-          onClose={onClose}
-        />
-      </Box>
-    </Modal>
+    <CenterModal open={open} onClose={onClose}>
+      <Form
+        id={id}
+        title={title}
+        limit={limit}
+        onClose={onClose}
+      />
+    </CenterModal>
   );
 }

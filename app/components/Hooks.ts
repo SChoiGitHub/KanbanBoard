@@ -97,12 +97,12 @@ const DELETE_TASK = gql(/* GraphQL */`
 export const useDeleteTask = (task: Task) => useMutation(DELETE_TASK, {
   variables: { taskId: task.id },
   update: (cache, { data }) => {
-    const id = data?.deleteTask?.id;
-    if (!id) {
+    const deleteTask = data?.deleteTask;
+    if (!deleteTask) {
       return;
     }
 
-    const cacheId = cache.identify({ id, __typename: 'Task' });
+    const cacheId = cache.identify(deleteTask);
     cache.evict({ id: cacheId });
     cache.gc();
   },
