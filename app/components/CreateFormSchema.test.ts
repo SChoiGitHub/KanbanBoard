@@ -28,4 +28,18 @@ describe('CreateFormSchema', () => {
 
     expect(actual.success).toBeFalsy();
   });
+
+  it('prevents duplicate names', async () => {
+    const obj = {
+      "name": "Testing",
+      "statuses": [
+        { name: "123" },
+        { name: "123" },
+      ]
+    };
+
+    const actual = CreateFormSchema.safeParse(obj);
+
+    expect(actual.success).toBeFalsy();
+  });
 });

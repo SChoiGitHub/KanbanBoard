@@ -24,5 +24,4 @@ In order to understand what Kanban is, I created an application that would facil
 - Account functionality
 - Nicer UI: Modals, Tooltips, etc.
 -- Error List should be replaced
--- Validate for uniqueness
 - CreateBoard should update cache
