@@ -27,7 +27,7 @@ const client = new ApolloClient({
       Task: {
         keyFields: ["id"],
       },
-    }
+    },
   }),
 });
 

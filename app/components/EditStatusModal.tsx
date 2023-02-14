@@ -1,4 +1,3 @@
-import { ErrorList } from "@/components/ErrorList";
 import { NumberInput } from "@/components/NumberInput";
 import { TextInput } from "@/components/TextInput";
 import { gql } from "@/components/__gql__/gql";
@@ -72,7 +71,6 @@ const Form = ({ title, id, limit, onClose }: { title: string, id: number, limit?
           Submit
         </button>
         <br />
-        <ErrorList errors={methods.formState.errors} />
       </FormProvider>
     </>
   )
